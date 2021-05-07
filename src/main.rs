@@ -15,6 +15,7 @@ async fn main() -> Result<(), reqwest::Error> {
 
     let mut images = vec!();
 
+    //get the wave plot images only
     for element in document.select(&selector) {
         match element.value().attr("src") {
             Some(x) if x.contains("plot_wave") => images.push(x),
@@ -22,6 +23,8 @@ async fn main() -> Result<(), reqwest::Error> {
         }
     }
     let mut counter = 1;
+
+    //make requests for the byte data and save as images locally
     for imgurl in images {
         let img_bytes = reqwest::get(imgurl).await?;
         let bytes = img_bytes.bytes().await?;
